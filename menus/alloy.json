@@ -1,0 +1,26 @@
+{
+  "context-menu": {
+    "atom-text-editor": [
+      {
+        "label": "Toggle alloy",
+        "command": "alloy:toggle"
+      }
+    ]
+  },
+  "menu": [
+    {
+      "label": "Packages",
+      "submenu": [
+        {
+          "label": "alloy",
+          "submenu": [
+            {
+              "label": "Toggle",
+              "command": "alloy:toggle"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
