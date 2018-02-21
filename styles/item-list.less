@@ -1,9 +1,14 @@
+@import "ui-variables";
+
 @ui-size:           1em;
 @ui-padding:        @ui-size*1.5;
 @ui-line-height:    @ui-size*2;
 
-@border-color: #181a1f;
-@hover-color: lighten(@border-color, 6%);
+@pane-item-hover-color: lighten(@pane-item-background-color, 6%);
+
+@list-item-padding-v: @ui-padding/2.5;
+@list-item-padding-h: @ui-padding/1.5;
+@list-item-padding: @list-item-padding-v @list-item-padding-h;
 
 .alloy .item-list {
 
@@ -15,31 +20,61 @@
 
     .item {
 
+        display: flex;
         cursor: pointer;
         line-height: @ui-line-height;
-        padding: @ui-padding/2.5 @ui-padding/1.5;
-        border-bottom: 1px solid @border-color;
+        border-bottom: 1px solid @pane-item-border-color;
+        background-color: @level-3-color;
+        user-select: none;
 
         &:first-of-type {
-            border-top: 1px solid @border-color;
+            border-top: 1px solid @pane-item-border-color;
         }
 
         &:hover {
-            background-color: @hover-color;
+            .icon, .message, .right {
+                background-color: @level-1-color;
+            }
+        }
+
+        .icon {
+            flex: 0 1 auto;
+            padding: @list-item-padding;
+            background-color: @level-2-color;
+            border-right: 1px solid @pane-item-border-color;
+            color: @text-color-info;
+
+            &::before {
+                margin-right: 0;
+                text-align: center;
+            }
+        }
+
+        .message {
+            flex: 1 0 auto;
+            padding: @list-item-padding;
+        }
+
+        .right {
+            // position: fixed;
+            // right: 0;
+            flex: 0 1 auto;
+            padding: @list-item-padding;
+            padding-left: 0;
         }
 
     }
 
     ol, ul {
 
-        border: 1px solid @border-color;
+        border: 1px solid @pane-item-border-color;
         padding: 0;
 
         li {
             line-height: 2em;
             height: 2em;
             padding: 0 1.5em;
-            border-bottom: 1px solid @border-color;
+            border-bottom: 1px solid @pane-item-border-color;
             list-style: none;
 
             &:last-of-type {
