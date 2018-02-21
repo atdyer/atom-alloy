@@ -1,0 +1,50 @@
+@ui-size:           1em;
+@ui-padding:        @ui-size*1.5;
+@ui-line-height:    @ui-size*2;
+
+@border-color: #181a1f;
+@hover-color: lighten(@border-color, 6%);
+
+.alloy .item-list {
+
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 0 auto;
+    background-color: transparent;
+
+    .item {
+
+        cursor: pointer;
+        line-height: @ui-line-height;
+        padding: @ui-padding/2.5 @ui-padding/1.5;
+        border-bottom: 1px solid @border-color;
+
+        &:first-of-type {
+            border-top: 1px solid @border-color;
+        }
+
+        &:hover {
+            background-color: @hover-color;
+        }
+
+    }
+
+    ol, ul {
+
+        border: 1px solid @border-color;
+        padding: 0;
+
+        li {
+            line-height: 2em;
+            height: 2em;
+            padding: 0 1.5em;
+            border-bottom: 1px solid @border-color;
+            list-style: none;
+
+            &:last-of-type {
+                border-bottom: none;
+            }
+        }
+    }
+}

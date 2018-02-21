@@ -6,6 +6,7 @@
 @import "syntax-variables";
 @import "octicon-utf-codes";
 @import "octicon-mixins";
+@import "item-list.less";
 
 .alloy {
 
@@ -13,13 +14,28 @@
         margin-bottom: 0;
     }
 
-    .btn-col {
+    .btn-col-9 {
 
         min-width: 75%;
 
         button {
             width: 100%;
             margin-bottom: 0.5em;
+        }
+    }
+
+    .btn-col-12 {
+        min-width: 100%;
+
+        button {
+            width: 100%;
+            margin-bottom: 0.5em;
+        }
+    }
+
+    .btn-col-compact {
+        button {
+            margin-bottom: 0 !important;
         }
     }
 
