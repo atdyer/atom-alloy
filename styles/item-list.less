@@ -10,6 +10,10 @@
 @list-item-padding-h: @ui-padding/1.5;
 @list-item-padding: @list-item-padding-v @list-item-padding-h;
 
+@color-ready: @text-color-info;
+@color-running: @text-color-success;
+@color-error: @text-color-error;
+
 .alloy .item-list {
 
     display: flex;
@@ -19,6 +23,16 @@
     background-color: transparent;
 
     .item {
+
+        &.running {
+            .icon { color: @color-running; };
+            kbd { background-color: @color-running; }
+        }
+
+        &.error {
+            .icon { color: @color-error !important; };
+            kbd { background-color: @color-error !important; }
+        }
 
         display: flex;
         cursor: pointer;
@@ -32,32 +46,36 @@
         }
 
         &:hover {
-            .icon, .message, .right {
+            div {
                 background-color: @level-1-color;
             }
         }
 
         .icon {
             flex: 0 1 auto;
-            padding: @list-item-padding;
-            background-color: @level-2-color;
-            border-right: 1px solid @pane-item-border-color;
-            color: @text-color-info;
-
             &::before {
                 margin-right: 0;
                 text-align: center;
             }
+            color: @color-ready;
         }
 
-        .message {
+        .cmd-type {
+            padding: @list-item-padding;
+            background-color: @level-2-color;
+            border-right: 1px solid @pane-item-border-color;
+        }
+
+        kbd {
+            background-color: @color-ready;
+        }
+
+        .cmd-message {
             flex: 1 0 auto;
             padding: @list-item-padding;
         }
 
         .right {
-            // position: fixed;
-            // right: 0;
             flex: 0 1 auto;
             padding: @list-item-padding;
             padding-left: 0;
