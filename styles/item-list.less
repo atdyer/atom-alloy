@@ -14,6 +14,37 @@
 @color-running: @text-color-success;
 @color-error: @text-color-error;
 
+.alloy .header {
+
+    display: flex;
+    align-items: center;
+    background-color: @level-2-color;
+    padding: @ui-size;
+
+    .title {
+        flex: 1 0 auto;
+        display: flex;
+        align-items: center;
+        font-size: @ui-padding;
+        vertical-align: middle;
+    }
+
+    .icon-button {
+        flex: 0 1 auto;
+        cursor: pointer;
+
+        &::before {
+            margin-right: 0;
+            text-align: center;
+        }
+
+        &:hover {
+            color: @color-ready;
+        }
+    }
+
+}
+
 .alloy .item-list {
 
     display: flex;
