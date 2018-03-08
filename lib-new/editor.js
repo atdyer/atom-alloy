@@ -1,25 +1,49 @@
 'use babel';
 
+// Alloy
+import alloy_command from './alloy-command';
+
 // Atom
 import { CompositeDisposable } from 'atom';
+
 
 export default function editor () {
 
     let _alloy = null,
-        _editor = null,
-        _commands = [],
+        _atom_editor = null,
         _editor_subscriptions = new CompositeDisposable();
+
+    let _commands = [];
 
     function _editor (editor) {
 
         // Set the atom editor we're proxying
-        _editor = editor;
+        _atom_editor = editor;
 
         // Subscribe to text changes
         _editor_subscriptions.dispose();
         _editor_subscriptions.add(
-            editor.onDidStopChanging(_editor.parse)
+            _atom_editor.onDidStopChanging(_editor.parse),
+            _atom_editor.onDidDestroy(_editor.dispose)
         );
+
+        return _editor;
+
+    }
+
+    _editor.alloy = function (alloy) {
+
+        if (!arguments.length) return _alloy;
+
+        if (alloy) {
+            alloy.on_java_running(function () {
+                _alloy = alloy;
+                console.log('Alloy set for editor');
+                _commands.forEach(function (command) {
+                    command.alloy(_alloy);
+                });
+            });
+        }
 
         return _editor;
 
@@ -63,30 +87,28 @@ export default function editor () {
                     .command(command);
 
             }
-        })
+        });
+
+        // TODO: Pick up from here.
+        _commands.forEach(function (c) {
+            console.log(c.string());
+        });
 
         return _editor;
+    }
+
+    _editor.dispose = function () {
+
+        _editor_subscriptions.dispose();
+        _commands.forEach(function (command) {
+            command.dispose();
+        });
+
     }
 
     _editor.parse = function () {
 
-        if (_editor && _alloy) _alloy.parse(_editor.getText(), _on_parse);
-
-        return _editor;
-
-    }
-
-    _editor.alloy = function (alloy) {
-
-        if (!alloy) return _alloy;
-
-        // Only set alloy once we are sure it is ready to be used
-        _alloy.on_java_ready(function () {
-            _alloy = alloy;
-            _commands.forEach(function (command) {
-                command.alloy(_alloy);
-            });
-        });
+        if (_atom_editor && _alloy) _alloy.parse(_atom_editor.getText(), _on_parse);
 
         return _editor;
 

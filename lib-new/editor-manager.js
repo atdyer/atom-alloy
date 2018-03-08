@@ -1,29 +1,46 @@
 'use babel';
 
-// Utilities
-import { extension } from './util';
+// Alloy
+import editor from './editor';
 
 // Atom
-import { CompositeDisposable } from 'atom';
+import { Emitter } from 'atom';
 
 
 export default function editor_manager () {
 
-    let _active_editor = null,
-        _editors = {},
-        _runner = null,
-        _subscriptions = new CompositeDisposable(),
-        _editor_subscriptions = new CompositeDisposable(),
-        _runner_subscriptions = new CompositeDisposable();
+    let _editors = {},
+        _emitter = new Emitter();
+
+    let _alloy = null,
+        _alloy_subscription = null,
+        _atom_subscription = atom.workspace.observeActiveTextEditor(_set_active_editor);
 
     let _manager = {};
 
+    _manager.alloy = function (alloy) {
+
+        if (!arguments.length) return _alloy;
+
+        if (alloy) {
+            _alloy_subscription = alloy.on_java_running(function () {
+                _alloy = alloy;
+                _manager.each(function (editor) {
+                    editor.alloy(_alloy);
+                });
+            });
+        }
+
+        return _manager;
+
+    }
+
     _manager.dispose = function () {
 
-        _subscriptions.dispose();
-        _editor_subscriptions.dispose();
-        _runner_subscriptions.dispose();
-        _editors.forEach(function (editor) {
+        if (_alloy_subscription) _alloy_subscription.dispose();
+        if (_atom_subscription) _atom_subscription.dispose();
+        if (_editor_subscription) _editor_subscription.dispose();
+        _manager.each(function (editor) {
             editor.dispose();
         });
 
@@ -31,90 +48,49 @@ export default function editor_manager () {
 
     }
 
-    function _build_manager () {
+    _manager.each = function (callback) {
+        for (key in _editors) {
+            if (_editors.hasOwnProperty(key)) {
+                callback(_editors[key]);
+            }
+        }
+    }
 
-        // Subscribe to changes in the active text editor
-        _subscriptions.add(
-            atom.workspace.observeActiveTextEditor(_set_active_editor)
-        );
+    _manager.on_active_editor_change = function (callback) {
 
-        return _manager;
+        return _emitter.on('change', callback);
 
     }
 
-    function _parse_active_editor () {
+    function _set_active_editor (active_editor) {
 
-        if (_active_editor) _active_editor.parse();
-
-    }
-
-    function _set_active_editor (editor) {
-
-        let path = editor.getPath();
-
-        // Unsubscribe from previous editor
-        _editor_subscriptions.dispose();
+        let path = active_editor.getPath();
 
         // Check the file extension
-        if (extension(path) === 'als') {
+        if (path.split('.').pop() === 'als') {
 
             // Check if the editor has been previously opened
             let e =  _editors[path];
             if (!e) {
 
                 // It hasn't, so make a new one
-                e = alloy_editor()
-                    .runner(_runner);
+                e = editor().alloy(_alloy);
 
                 // Store the new editor
-                _editors[path] = e(editor);
+                _editors[path] = e(active_editor);
 
             }
 
-            // Set the active editor
-            _active_editor = e;
-
-            // Subscribe to the active editor
-            _subscribe_to_active_editor();
-
-            // Parse the active editor
-            _parse_active_editor();
-
-            // Show the alloy panel
-            atom.workspace.open('atom://alloy');
+            _emitter.emit('change', e.parse());
 
         } else {
 
-            // Unset the active editor
-            _active_editor = null;
-
-            // Hide the alloy panel
-            atom.workspace.hide('atom://alloy');
+            _emitter.emit('change', null);
 
         }
 
     }
 
-    function _subscribe_to_active_editor () {
-
-        if (_active_editor) {
-            _editor_subscriptions.add(
-                _editor.onDidStopChanging(_parse_active_editor);
-            );
-        }
-
-    }
-
-    function _subscribe_to_runner () {
-
-        if (_runner) {
-            _runner_subscriptions.add(
-                _runner.on_java_ready(_parse_active_editor)
-            );
-        }
-
-    }
-
-    return _build_manager();
+    return _manager;
 
 }

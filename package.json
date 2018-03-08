@@ -1,6 +1,6 @@
 {
   "name": "alloy",
-  "main": "./lib/alloy",
+  "main": "./lib-new/index",
   "version": "0.0.0",
   "description": "A short description of your package",
   "keywords": [

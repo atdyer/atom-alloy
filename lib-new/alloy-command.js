@@ -1,4 +1,4 @@
- 'use babel';
+'use babel';
 
 // Views
 import alloy_command_view from './views/alloy-command-view';
@@ -7,16 +7,16 @@ import alloy_command_view from './views/alloy-command-view';
 export default function alloy_command () {
 
     let _alloy = null,
-        _command = null,
-        _view = alloy_command_view()command(_alloy_command);
+        _command = null; //,
+        // _view = alloy_command_view()(_alloy_command);
 
     function _alloy_command (selection) {
 
-        _view = alloy_command_view()
-            .command(_alloy_command);
+        // _view = alloy_command_view()
+            // .command(_alloy_command);
 
 
-        return _view(selection);
+        // return _view(selection);
     }
 
     _alloy_command.alloy = function (alloy) {
