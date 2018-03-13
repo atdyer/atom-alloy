@@ -1,13 +1,15 @@
 {
   "name": "alloy-tools",
   "main": "./lib/index",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Editor tools for the Alloy modeling language",
   "keywords": [
-      "alloy",
-      "modeling"
+    "alloy",
+    "modeling"
   ],
-  "activationHooks": ["alloy:grammar-used"],
+  "activationHooks": [
+    "alloy:grammar-used"
+  ],
   "repository": "https://github.com/atdyer/atom-alloy.git",
   "license": "MIT",
   "engines": {
