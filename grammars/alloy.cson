@@ -5,29 +5,31 @@ name: 'Alloy'
 fileTypes: ['als']
 patterns: [
   { include: '#comments' }
-  # { include: '#modifiers' }
+  { include: '#modifiers' }
   { include: '#compareOp' }
   { include: '#binOp' }
   { include: '#unOp' }
-  # { include: '#modules' }
-  # { include: '#signatures' }
-  # { include: '#keywords' }
+  { include: '#modules' }
+  { include: '#declarations' }
+  { include: '#keywords' }
 ]
 repository:
-
 
   compareOp: {
     match: '\\bin\\b|=(?!>)|<|(<!-)>|=<|>='
     name: 'constant.character.alloy'
   }
+
   binOp: {
     match: '\\b(or|and|iff|implies)\\b|\\|{2}|&&|<=>|=>|&|\\+|-(?!>)|<:|:>|\\.'
     name: 'variable.language.alloy'
   }
+
   mult: {
     match: '\\b(lone|some|one)\\b'
     name: 'storage.modifier.alloy'
   }
+
   unOp: {
     patterns: [
       {
@@ -57,27 +59,22 @@ repository:
       }
     ]
   }
-  signatures: {
-    begin: '(sig)'
-    beginCaptures:
-      '0': 'meta.block.start.alloy'
-      '1': 'markup.bold.alloy'
-    end: '}'
-    patterns: [
-      { include: '#comments' }
-    ]
-    name: 'markup.bold.alloy'
-  }
 
+  declarations: {
+    match: '\\b(sig|fact|pred|fun|assert|run|check)\\b'
+    name: 'entity.name.type.markup.bold.alloy';
+  }
 
   modifiers: {
     match: '\\b(abstract|all|disj|lone|no|one|set|some|sum)\\b'
     name: 'storage.modifier.alloy'
   }
+
   keywords: {
     match: '\\b(this|else|let)\\b|\\|'
     name: 'variable.language.alloy'
   }
+
   modules: {
     match: '\\b(module|open|import)\\b'
     name: 'entity.name.section.markup.bold.alloy'

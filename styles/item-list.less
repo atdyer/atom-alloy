@@ -79,6 +79,16 @@
     .cmd-status     { color: @text-color-success; }
 }
 
+.solved-consistent .cmd-status:hover {
+    background-color: @text-color-success !important;
+    color: @level-1-color !important;
+}
+
+.solved-invalid .cmd-status:hover {
+    background-color: @text-color-error !important;
+    color: @level-1-color !important;
+}
+
 .solved-inconsistent, .solved-invalid {
     .cmd-message    { color: @text-color-highlight; }
     .cmd-type       { color: @text-color-error; }
@@ -144,7 +154,7 @@
     .cmd-option {
         flex: 0 1 auto;
         padding-right: @list-item-padding-h;
-        padding-left: 0;
+        padding-left: @list-item-padding-h;
     }
 
     .icon {
