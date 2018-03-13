@@ -58,24 +58,31 @@
 }
 
 
-.cmd-message    { color: darken(@text-color-highlight, 25%); }
-.cmd-type       { color: darken(@text-color-info, 10%); }
-.cmd-status     { color: darken(@text-color-info, 10%); }
+.cmd-message    { color: @text-color-highlight; }
+.cmd-status     { color: @text-color-info; }
 
 .compiled {
-    .cmd-message    { color: @text-color-highlight !important; }
-    .cmd-type       { color: @text-color-info !important; }
-    .cmd-status     { color: @text-color-info !important; }
+    .cmd-type       { color: @text-color-info; }
+}
+
+.invalidated {
+    .cmd-type       { color: darken(@text-color-subtle, 15%) !important; }
 }
 
 .running {
     .cmd-message    { color: darken(@text-color-highlight, 25%) !important; }
 }
 
-.finished {
-    .cmd-message    { color: @text-color-highlight !important; }
-    .cmd-type       { color: @text-color-success !important; }
-    .cmd-status     { color: @text-color-success !important; }
+.solved-consistent, .solved-valid {
+    .cmd-message    { color: @text-color-highlight; }
+    .cmd-type       { color: @text-color-success; }
+    .cmd-status     { color: @text-color-success; }
+}
+
+.solved-inconsistent, .solved-invalid {
+    .cmd-message    { color: @text-color-highlight; }
+    .cmd-type       { color: @text-color-error; }
+    .cmd-status     { color: @text-color-error; }
 }
 
 .alloy .item-list {
