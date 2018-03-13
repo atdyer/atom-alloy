@@ -14,34 +14,16 @@
 @color-running: @text-color-success;
 @color-error: @text-color-error;
 
-.alloy .modal {
+@color-not-compiled: @text-color-subtle;
+@color-compiled: @text-color-info;
 
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    -webkit-animation: overlay-fade 0.2s cubic-bezier(0.215, 0.61, 0.355, 1);
-
-    .header {
-        border-top: 1px solid @level-3-color;
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
     }
-
-    .content {
-        flex: 0 1 auto;
-        background-color: @level-1-color;
-        padding: @ui-size;
-        border-botton: 1px solid @level-3-color;
-        box-shadow: 0 6px 12px -2px rgba(0, 0, 0, 0.4);
+    to {
+        transform: rotate(360deg);
     }
-
-    .fill {
-        flex: 1 0 auto;
-        background-color: @level-2-color;
-        opacity: 0.9;
-    }
-
 }
 
 .alloy .header {
@@ -69,19 +51,31 @@
         }
 
         &:hover {
-            color: @color-ready;
+            color: @text-color-info;
         }
     }
 
 }
 
-@keyframes spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+
+.cmd-message    { color: darken(@text-color-highlight, 25%); }
+.cmd-type       { color: darken(@text-color-info, 10%); }
+.cmd-status     { color: darken(@text-color-info, 10%); }
+
+.compiled {
+    .cmd-message    { color: @text-color-highlight !important; }
+    .cmd-type       { color: @text-color-info !important; }
+    .cmd-status     { color: @text-color-info !important; }
+}
+
+.running {
+    .cmd-message    { color: darken(@text-color-highlight, 25%) !important; }
+}
+
+.finished {
+    .cmd-message    { color: @text-color-highlight !important; }
+    .cmd-type       { color: @text-color-success !important; }
+    .cmd-status     { color: @text-color-success !important; }
 }
 
 .alloy .item-list {
@@ -91,124 +85,201 @@
     width: 100%;
     margin: 0 auto;
     background-color: transparent;
+    color: @text-color-subtle;
 
     .item {
-
-        &.running {
-
-            cursor: default;
-            background-color: @level-2-color;
-            // box-shadow: inset 0 0 1px 1px @level-3-color;
-            // box-shadow: inset 5px 0 5px -5px @level-3-color;
-            // border-bottom: 1px solid @level-2-color;
-
-            &:hover {
-                div {
-                    background-color: transparent;
-                }
-            }
-
-            & + .running {
-                border-top: 1px solid @level-3-color;
-                // box-shadow: inset 5px 0 5px -5px @level-3-color;
-            }
-
-            .icon {
-                color: @color-running;
-                &.right::before {
-                    line-height: 0.9em;  // THIS WORKS FOR CENTERING FOR SOME REASON
-                    animation-name: spin;
-                    animation-duration: 1500ms;
-                    animation-iteration-count: 5;
-                    animation-timing-function: ease;
-
-                }
-            };
-
-            .cmd-type {
-                background-color: transparent;
-                border-right: 1px solid transparent;
-            }
-
-            kbd {
-                background-color: @color-running;
-            }
-        }
-
-        &.error {
-            .icon { color: @color-error !important; };
-            kbd { background-color: @color-error !important; }
-        }
-
         display: flex;
-        cursor: pointer;
         line-height: @ui-line-height;
         border-top: 1px solid @pane-item-border-color;
         background-color: @level-3-color;
+        cursor: default;
         user-select: none;
-
         &:last-of-type {
             border-bottom: 1px solid @pane-item-border-color;
         }
-
-        &:hover {
-            div {
-                background-color: @level-1-color;
-            }
+        &:hover div {
+            cursor: pointer;
+            background-color: @level-1-color;
         }
-
-        .icon {
-            flex: 0 1 auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            &::before {
-                margin-right: 0;
-                text-align: center;
-            }
-            color: @color-ready;
-        }
-
-        .cmd-type {
-            padding: @list-item-padding;
+        &.running {
             background-color: @level-2-color;
-            border-right: 1px solid @pane-item-border-color;
-        }
-
-        kbd {
-            background-color: @color-ready;
-        }
-
-        .cmd-message {
-            flex: 1 0 auto;
-            padding: @list-item-padding;
-        }
-
-        .right {
-            flex: 0 1 auto;
-            // padding: @list-item-padding;
-            padding-right: @list-item-padding-h;
-            padding-left: 0;
-        }
-
-    }
-
-    ol, ul {
-
-        border: 1px solid @pane-item-border-color;
-        padding: 0;
-
-        li {
-            line-height: 2em;
-            height: 2em;
-            padding: 0 1.5em;
-            border-bottom: 1px solid @pane-item-border-color;
-            list-style: none;
-
-            &:last-of-type {
-                border-bottom: none;
+            &:hover div {
+                cursor: default;
+                background-color: transparent;
+            }
+            & + .running {
+                border-top: 1px solid @level-3-color;
+            }
+            .cmd-type {
+                border-right: 1px solid transparent;
+            }
+            .cmd-status::before {
+                line-height: 0.9em;  // THIS WORKS FOR CENTERING FOR SOME REASON
+                animation-name: spin;
+                animation-duration: 1500ms;
+                animation-iteration-count: infinite;
+                animation-timing-function: ease;
             }
         }
     }
+
+    .cmd-type {
+        padding: @list-item-padding;
+        background-color: @level-2-color;
+        border-right: 1px solid @pane-item-border-color;
+    }
+
+    .cmd-message {
+        flex: 1 0 auto;
+        padding: @list-item-padding;
+    }
+
+    .cmd-option {
+        flex: 0 1 auto;
+        padding-right: @list-item-padding-h;
+        padding-left: 0;
+    }
+
+    .icon {
+        flex: 0 1 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        &::before {
+            margin-right: 0;
+            text-align: center;
+        }
+    }
+
 }
+
+
+// .alloy .item-list {
+//
+//     display: flex;
+//     flex-direction: column;
+//     width: 100%;
+//     margin: 0 auto;
+//     background-color: transparent;
+//
+//     .item {
+//
+//         &.running {
+//
+//             cursor: default;
+//             background-color: @level-2-color;
+//             // box-shadow: inset 0 0 1px 1px @level-3-color;
+//             // box-shadow: inset 5px 0 5px -5px @level-3-color;
+//             // border-bottom: 1px solid @level-2-color;
+//
+//             &:hover {
+//                 div {
+//                     background-color: transparent;
+//                 }
+//             }
+//
+//             & + .running {
+//                 border-top: 1px solid @level-3-color;
+//                 // box-shadow: inset 5px 0 5px -5px @level-3-color;
+//             }
+//
+//             .icon {
+//                 color: @color-running;
+//                 &.right::before {
+//                     line-height: 0.9em;  // THIS WORKS FOR CENTERING FOR SOME REASON
+//                     animation-name: spin;
+//                     animation-duration: 1500ms;
+//                     animation-iteration-count: 5;
+//                     animation-timing-function: ease;
+//
+//                 }
+//             };
+//
+//             .cmd-type {
+//                 background-color: transparent;
+//                 border-right: 1px solid transparent;
+//             }
+//
+//             kbd {
+//                 background-color: @color-running;
+//             }
+//         }
+//
+//         &.error {
+//             .icon { color: @color-error !important; };
+//             kbd { background-color: @color-error !important; }
+//         }
+//
+//         display: flex;
+//         cursor: pointer;
+//         line-height: @ui-line-height;
+//         border-top: 1px solid @pane-item-border-color;
+//         background-color: @level-3-color;
+//         user-select: none;
+//
+//         &:last-of-type {
+//             border-bottom: 1px solid @pane-item-border-color;
+//         }
+//
+//         &:hover {
+//             div {
+//                 background-color: @level-1-color;
+//             }
+//         }
+//
+//         .icon {
+//             flex: 0 1 auto;
+//             display: flex;
+//             flex-direction: column;
+//             align-items: center;
+//             justify-content: center;
+//             &::before {
+//                 margin-right: 0;
+//                 text-align: center;
+//             }
+//             color: @color-ready;
+//         }
+//
+//         .cmd-type {
+//             padding: @list-item-padding;
+//             background-color: @level-2-color;
+//             border-right: 1px solid @pane-item-border-color;
+//         }
+//
+//         kbd {
+//             background-color: @color-ready;
+//         }
+//
+//         .cmd-message {
+//             flex: 1 0 auto;
+//             padding: @list-item-padding;
+//         }
+//
+//         .right {
+//             flex: 0 1 auto;
+//             // padding: @list-item-padding;
+//             padding-right: @list-item-padding-h;
+//             padding-left: 0;
+//         }
+//
+//     }
+//
+//     // ol, ul {
+//     //
+//     //     border: 1px solid @pane-item-border-color;
+//     //     padding: 0;
+//     //
+//     //     li {
+//     //         line-height: 2em;
+//     //         height: 2em;
+//     //         padding: 0 1.5em;
+//     //         border-bottom: 1px solid @pane-item-border-color;
+//     //         list-style: none;
+//     //
+//     //         &:last-of-type {
+//     //             border-bottom: none;
+//     //         }
+//     //     }
+//     // }
+// }
